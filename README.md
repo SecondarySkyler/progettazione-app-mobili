@@ -1,6 +1,6 @@
 # my_closet
 
-Progetto per il corso di Progettazione di Applicazioni Mobili
+Progetto per il corso di Progettazione di Applicazioni Mobili\
 Università degli Studi di Udine
 
 ## Getting Started
