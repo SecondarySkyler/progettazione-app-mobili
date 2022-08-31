@@ -1,6 +1,7 @@
 # my_closet
 
-A new Flutter project.
+Progetto per il corso di Progettazione di Applicazioni Mobili
+Università degli Studi di Udine
 
 ## Getting Started
 
