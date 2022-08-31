@@ -58,7 +58,7 @@ class _ListaVestitiState extends State<ListaVestiti> {
         child: isLoading
             ? CircularProgressIndicator()
             : vestiti.isEmpty
-            ? const Text("Non ci sono vestiti, clicca sull'icona + per aggiungerne di nuovi")
+            ? const Text("Non ci sono vestiti, clicca sull'icona + \n per aggiungerne di nuovi", textAlign: TextAlign.center,)
             : filters.isEmpty
             ? ListaVestitoItem(listaVestiti: vestiti, refreshList: loadVestiti)
             : ListaVestitoItem(listaVestiti: _applyFilter(), refreshList: loadVestiti),

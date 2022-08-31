@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
               future: get(),
               builder: (BuildContext context, AsyncSnapshot<List<Indumento>> snapshot) {
                 Widget child;
-                if (snapshot.hasData) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return GridView.count(
                     mainAxisSpacing: 3.5,
                     crossAxisSpacing: 3.5,
@@ -76,6 +76,8 @@ class _HomeState extends State<Home> {
                       ),
                     )).toList(),
                   );
+                } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+                  child = const Text('Nessun vestito aggiunto di recente', textAlign: TextAlign.center,);
                 } else {
                   child = const Text('no data');
                 }

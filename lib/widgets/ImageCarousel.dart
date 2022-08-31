@@ -14,9 +14,9 @@ class ImageCarousel extends StatefulWidget {
 }
 
 class _ImageCarouselState extends State<ImageCarousel> {
-  int activePage = 1;
+  int activePage = 0;
   late Future<List<Outfit>> listaOutfit;
-  late int listaLength;
+  int listaLength = 3;
 
   @override
   void initState() {
@@ -38,7 +38,8 @@ class _ImageCarouselState extends State<ImageCarousel> {
     List<Outfit> savedOutfit = await _getOutfit();
     List<Outfit> daily = [];
     if (savedOutfit.length < 3) {
-      return daily;
+      listaLength = savedOutfit.length;
+      return savedOutfit;
     } else {
       var counter = 0;
       while (counter < 3) {
@@ -58,7 +59,6 @@ class _ImageCarouselState extends State<ImageCarousel> {
       child: Column(
         children: [
           _buildCarousel(),
-          _buildIndicators()
         ],
       ),
     );
@@ -69,21 +69,34 @@ class _ImageCarouselState extends State<ImageCarousel> {
       future: listaOutfit,
       builder: (BuildContext context, AsyncSnapshot<List<Outfit>> snapshot) {
         Widget child;
-        if (snapshot.hasData) {
-          child = CarouselSlider(
-              items: _buildGrid(snapshot.data!),
-              options: CarouselOptions(
-                viewportFraction: 0.6,
-                enlargeCenterPage: true,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    activePage = index;
-                  });
-                }
+        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          child = Column(
+            children: [
+              CarouselSlider(
+                  items: _buildGrid(snapshot.data!),
+                  options: CarouselOptions(
+                    viewportFraction: 0.6,
+                    enlargeCenterPage: true,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        activePage = index;
+                      });
+                    }
+                  ),
               ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 7, 0, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: indicators(snapshot.data!.length, activePage)
+                ),
+              )
+            ],
           );
+        } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+          child = const Text('Non hai nessun outfit, \n puoi crearli dalla sezione Outfit', textAlign: TextAlign.center,);
         } else {
-          child = const Text('no data');
+          child = const Text('bug');
         }
         return child;
       },
@@ -91,15 +104,15 @@ class _ImageCarouselState extends State<ImageCarousel> {
     );
   }
 
-  Widget _buildIndicators() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 7, 0, 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: indicators(3, activePage)
-      ),
-    );
-  }
+  // Widget _buildIndicators() {
+  //   return Padding(
+  //     padding: const EdgeInsets.fromLTRB(0, 7, 0, 0),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: indicators(listaLength, activePage)
+  //     ),
+  //   );
+  // }
 
 
   List<Widget> _buildGrid(List<Outfit> outfits) {

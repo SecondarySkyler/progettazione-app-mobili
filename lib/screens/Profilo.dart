@@ -122,7 +122,13 @@ class _ProfiloState extends State<Profilo> {
       future: _numColor(),
       builder: (BuildContext context, AsyncSnapshot<Map<String, double>> snapshot) {
         Widget child;
-        if (snapshot.hasData) {
+        /*
+         nel caso in cui l'app non abbia dati, la future ritorna una mappa vuota
+         perciò hasData è true ma l'asserzione isEmpty su dataMap solleva eccezione
+         quindi nell'if controllo se la mappa ha dei dati
+         */
+
+        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           child = Column(
             children: [
               const Text('Colori più usati', style: TextStyle(fontWeight: FontWeight.bold),),
@@ -157,6 +163,8 @@ class _ProfiloState extends State<Profilo> {
               )
             ],
           );
+        } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+          child = const Text('Aggiungi vestiti per visionare le statistiche \n relative ai colori', textAlign: TextAlign.center,);
         } else {
           child = const Text('bug del grafico \n Home -> Profilo funziona \n Vestiti/Outfit -> Profilo no');
         }
